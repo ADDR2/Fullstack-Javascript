@@ -8,6 +8,7 @@ function start() {
 	const app = express();
 
 	/* Import routes */
+	const adminRoutes = require('./routes/admin');
 	const userRoutes = require('./routes/user');
 	const restaurantRoutes = require('./routes/restaurant');
 
@@ -19,6 +20,7 @@ function start() {
 	app.use(express.static('public'));
 
 	/* Define routes */
+	app.use("/admin", adminRoutes);
 	app.use("/user", userRoutes);
 	app.use("/restaurant", restaurantRoutes);
 

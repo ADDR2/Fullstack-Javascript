@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { isEqual } from "lodash";
+import { parse } from 'query-string';
 
 /* Actions */
 import { updateMap, getUserInfo, getRestaurants } from 'MapReducer';
@@ -62,9 +63,28 @@ export class MapComponent extends Component {
 
 	componentDidUpdate(prevProps) {
 		if	(document.getElementById('map') && !this.state.map) {
+			const { location: { search } } = this.props;
+			let queryParams;
+
+			try {
+				queryParams = parse(search);
+			} catch(error) {
+				queryParams = {};
+			}
+
+			if ('lat' in queryParams && 'lng' in queryParams) {
+				const lat = parseFloat(queryParams.lat);
+				const lng = parseFloat(queryParams.lng);
+
+				if (!isNaN(lat) && !isNaN(lng)) {
+					this.setMap(lat, lng);
+					this.debouncer.debounce([lat, lng]);
+					return;	
+				}
+			}
+			
 			if ("geolocation" in navigator) {
 				navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
-					console.log(latitude, longitude);
 					this.setMap(latitude, longitude);
 				});
 			} else {
@@ -73,7 +93,10 @@ export class MapComponent extends Component {
 		} else {
 			const { restaurants } = this.props;
 			const { restaurants: prevRestaurants } = prevProps;
-			this.props.restaurants.length && !isEqual(restaurants, prevRestaurants) && this.updateMarkers();
+
+			Array.isArray(this.props.restaurants) &&
+			this.props.restaurants.length &&
+			!isEqual(restaurants, prevRestaurants) && this.updateMarkers();
 		}
 	}
 
