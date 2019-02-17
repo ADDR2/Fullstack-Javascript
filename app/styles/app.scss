@@ -1,0 +1,17 @@
+@import "base/variables";
+@import "base/mixins";
+
+// Components
+@import "components/Login";
+@import "components/MapComponent";
+
+//Fonts
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+//Body
+body {
+    @include bodyBackground($backgroundBaseColor, $backgroundGradient);
+    font-family: "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;      
+}

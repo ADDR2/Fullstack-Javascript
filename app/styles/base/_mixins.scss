@@ -1,0 +1,7 @@
+@mixin bodyBackground($baseColor, $gradientColor) {
+    background: $baseColor;
+    background: -webkit-linear-gradient(right, $baseColor, $gradientColor);
+    background: -moz-linear-gradient(right, $baseColor, $gradientColor);
+    background: -o-linear-gradient(right, $baseColor, $gradientColor);
+    background: linear-gradient(to left, $baseColor, $gradientColor);
+}
